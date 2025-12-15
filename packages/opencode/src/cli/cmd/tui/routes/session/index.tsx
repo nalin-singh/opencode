@@ -53,6 +53,7 @@ import { iife } from "@/util/iife"
 import { DialogConfirm } from "@tui/ui/dialog-confirm"
 import { DialogPrompt } from "@tui/ui/dialog-prompt"
 import { DialogTimeline } from "./dialog-timeline"
+import { DialogSearchMessages } from "./dialog-search-messages"
 import { DialogSessionRename } from "../../component/dialog-session-rename"
 import { Sidebar } from "./sidebar"
 import { LANGUAGE_EXTENSIONS } from "@/lsp/language"
@@ -290,6 +291,25 @@ export function Session() {
             }}
             sessionID={route.sessionID}
             setPrompt={(promptInfo) => prompt.set(promptInfo)}
+          />
+        ))
+      },
+    },
+    {
+      title: "Search messages",
+      value: "session.search",
+      keybind: "messages_search",
+      category: "Session",
+      onSelect: (dialog) => {
+        dialog.replace(() => (
+          <DialogSearchMessages
+            sessionID={route.sessionID}
+            onMove={(messageID) => {
+              const child = scroll.getChildren().find((child) => {
+                return child.id === messageID
+              })
+              if (child) scroll.scrollBy(child.y - scroll.y - 1)
+            }}
           />
         ))
       },
